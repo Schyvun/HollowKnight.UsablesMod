@@ -1,33 +1,35 @@
 ﻿using UnityEngine;
 using System.Collections;
-using System;
 
 namespace UsablesMod.Usables
 {
     class HealthUsable : MonoBehaviour, IUsable, IRevertable
     {
-        private System.Random random;
+        private readonly System.Random random;
         private bool running;
+        private string displayName;
+
+        public HealthUsable(int randomSeed)
+        {
+            random = new System.Random(randomSeed);
+            displayName = "Health Supply";
+        }
 
         public void Run()
         {
-            random = new System.Random(DateTime.Now.Ticks.GetHashCode());
             running = true;
 
             int amount = random.Next(1, 3);
             if (amount == 1)
             {
                 GameManager.instance.StartCoroutine(Regeneration());
+                displayName = "Regeneration";
             }
             else
             {
                 GameManager.instance.StartCoroutine(Poison());
+                displayName = "Poison";
             }
-        }
-
-        public bool IsRevertable()
-        {
-            return true;
         }
 
         public float GetDuration()
@@ -53,19 +55,20 @@ namespace UsablesMod.Usables
         {
             while (running)
             {
-                HeroController.instance.TakeDamage(HeroController.instance.gameObject, GlobalEnums.CollisionSide.top, 1, 0);
+                GlobalEnums.CollisionSide ranHit = (GlobalEnums.CollisionSide)random.Next(5);
+                HeroController.instance.TakeDamage(HeroController.instance.gameObject, ranHit, 1, 0);
                 yield return new WaitForSeconds(random.Next(3, 12));
             }
         }
 
         public string GetName()
         {
-            return "HealUsable";
+            return "Health_Usable";
         }
 
         public string GetDisplayName()
         {
-            return "Health Supply";
+            return displayName;
         }
 
         public string GetDescription()
@@ -75,7 +78,7 @@ namespace UsablesMod.Usables
 
         public string GetItemSpriteKey()
         {
-            return "ShopIcons.Focus";
+            return "ShopIcons.MaskShard";
         }
     }
 }

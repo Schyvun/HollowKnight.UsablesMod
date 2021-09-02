@@ -1,13 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 namespace UsablesMod.Usables
 {
     class RandomCharmsUsable : IUsable
-    { 
-        private readonly List<int> ownedCharms = new List<int>();
+    {
+        private readonly Random random;
+        
+        public RandomCharmsUsable(int randomSeed) 
+        {
+            random = new Random(randomSeed);
+        }
 
         public void Run()
         {
-            System.Random rnd = new System.Random();
+            List<int> ownedCharms = new List<int>(); 
             for (int i = 1; i < 41; i++)
             {
                 if (PlayerData.instance.GetBool("gotCharm_" + i))
@@ -20,22 +26,25 @@ namespace UsablesMod.Usables
                     GameManager.instance.UnequipCharm(i);
                 }
             }
+
             if (ownedCharms.Count == 0) return;
-            int equippedCharmsCount = rnd.Next(1, ownedCharms.Count + 1);
+
+            int equippedCharmsCount = random.Next(1, ownedCharms.Count + 1);
             for (int i = 0; i < equippedCharmsCount; i++)
             {
-                int charmIndex = rnd.Next(ownedCharms.Count);
-                PlayerData.instance.SetBool("equippedCharm_" + charmIndex, true);
+                int charmIndex = random.Next(ownedCharms.Count);
+                PlayerData.instance.SetBool("equippedCharm_" + ownedCharms[charmIndex], true);
                 GameManager.instance.EquipCharm(ownedCharms[charmIndex]);
                 ownedCharms.RemoveAt(charmIndex);
             }
+
             HeroController.instance.CharmUpdate();
             GameManager.instance.RefreshOvercharm();
         }
 
         public string GetName()
         {
-            return "RandomCharmsUsable";
+            return "Randomize_Charms_Build_Usable";
         }
 
         public string GetDisplayName()

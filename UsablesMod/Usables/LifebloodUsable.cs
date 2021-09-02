@@ -4,9 +4,15 @@ namespace UsablesMod.Usables
 {
     class LifebloodUsable : IUsable
     {
+        private readonly int amount;
+
+        public LifebloodUsable(int randomSeed)
+        {
+            amount = new Random(randomSeed).Next(2, 10);
+        }
+
         public void Run()
         {
-            int amount = new Random(RandomizerMod.RandomizerMod.Instance.Settings.Seed).Next(3, 7);
             for (int i = 0; i < amount; i++)
             {
                 EventRegister.SendEvent("ADD BLUE HEALTH");
@@ -15,7 +21,7 @@ namespace UsablesMod.Usables
 
         public string GetName()
         {
-            return "LifebloodUsable";
+            return "Lifeblood_Usable";
         }
         public string GetDisplayName()
         {

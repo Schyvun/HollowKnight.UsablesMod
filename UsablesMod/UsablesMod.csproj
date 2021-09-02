@@ -50,6 +50,15 @@
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Hollow Knight\hollow_knight_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Hollow Knight\hollow_knight_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Hollow Knight\hollow_knight_Data\Managed\UnityEngine.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UIModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Hollow Knight\hollow_knight_Data\Managed\UnityEngine.UIModule.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -58,9 +67,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActiveUsablesBar.cs" />
     <Compile Include="LogHelper.cs" />
+    <Compile Include="NameFormatter.cs" />
     <Compile Include="UsablesExecuter.cs" />
     <Compile Include="UsablesFactory.cs" />
+    <Compile Include="UsablesSlots.cs" />
     <Compile Include="UsablesManager.cs" />
     <Compile Include="UsablesMod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -71,7 +83,7 @@
     <Compile Include="Usables\IUsable.cs" />
     <Compile Include="Usables\LifebloodUsable.cs" />
     <Compile Include="Usables\OvercharmedUsable.cs" />
-    <Compile Include="Usables\NailDamageUsable.cs" />
+    <Compile Include="Usables\NailModifierUsable.cs" />
     <Compile Include="Usables\MPCostUsable.cs" />
     <Compile Include="Usables\HealthUsable.cs" />
     <Compile Include="Usables\RespawnUsable.cs" />

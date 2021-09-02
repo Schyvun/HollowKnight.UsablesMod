@@ -1,35 +1,74 @@
-﻿using System;
+﻿using HutongGames.PlayMaker;
+using System.Collections;
+using UnityEngine;
 
 namespace UsablesMod.Usables
 {
-    class MPCostUsable : IUsable
+    class MPCostUsable : IUsable, IRevertable
     {
+        private bool running = false;
+        private readonly int multiplier;
+        private FsmInt mpCost;
+        private string displayName;
+
+        public MPCostUsable(int randomSeed)
+        {
+            multiplier = new System.Random(randomSeed).Next(0, 2) * 2;
+            displayName = "Stell Twisper";
+        }
+
         public void Run()
         {
-            PlayMakerFSM SpellControl = HeroController.instance.gameObject.LocateMyFSM("Spell Control");
+            running = true;
+            mpCost = HeroController.instance.gameObject.LocateMyFSM("Spell Control").FsmVariables.FindFsmInt("MP Cost");
+            mpCost.Value *= multiplier;
+            if (multiplier > 1)
+            {
+                displayName = "Soul Eater";
+            }
+            else
+            {
+                displayName = "Stell Twisperer";
+            }
 
-            int multiplier = new Random(RandomizerMod.RandomizerMod.Instance.Settings.Seed).Next(0, 2) * 2;
-            SpellControl.FsmVariables.FindFsmInt("MP Cost").Value *= multiplier;
+            GameManager.instance.StartCoroutine(WaitingForBench());
+        }
+
+        private IEnumerator WaitingForBench()
+        {
+            while (running)
+            {
+                if (mpCost.Value == 24 || mpCost.Value == 33)
+                {
+                    while (!PlayerData.instance.atBench)
+                    {
+                        yield return new WaitForSeconds(2f);
+                    }
+                    mpCost.Value *= multiplier;
+                    yield return new WaitForSeconds(2f);
+                }
+                yield return new WaitForSeconds(2f);
+            }
         }
 
         public float GetDuration()
         {
-            return 30;
+            return 120;
         }
 
         public void Revert()
         {
-            PlayMakerFSM SpellControl = HeroController.instance.gameObject.LocateMyFSM("Spell Control");
-            SpellControl.FsmVariables.FindFsmInt("MP Cost").Value = PlayerData.instance.GetBool("equippedCharm_33") ? 24 : 33;
+            running = false;
+            mpCost.Value = PlayerData.instance.GetBool("equippedCharm_33") ? 24 : 33;
         }
 
         public string GetName()
         {
-            return "MPCost";
+            return "MP_Cost_Usable";
         }
         public string GetDisplayName()
         {
-            return "Stell Twisper";
+            return displayName;
         }
         public string GetDescription()
         {

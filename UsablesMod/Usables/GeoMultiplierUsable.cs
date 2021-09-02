@@ -4,26 +4,39 @@ namespace UsablesMod.Usables
 {
     class GeoMultiplierUsable : IUsable
     {
+        private readonly bool isGoodMultiplier;
+
+        private Random random;
+        private string displayName;
+
+        public GeoMultiplierUsable(int randomSeed)
+        {
+            random = new Random(randomSeed);
+            isGoodMultiplier = random.Next(2) == 0;
+            displayName = "Geo Multiplier";
+        }
+
         public void Run()
         {
-            int amount = new Random(DateTime.Now.Ticks.GetHashCode()).Next(1, 3);
-            if (amount == 1) 
+            if (isGoodMultiplier)
             {
-                HeroController.instance.TakeGeo((int) (PlayerData.instance.geo * 0.6f));
+                HeroController.instance.TakeGeo(PlayerData.instance.geo * random.Next(2, 5) / 10);
+                displayName = "Thanks for the geo!";
             } 
             else
             {
-                HeroController.instance.AddGeo((int) (PlayerData.instance.geo * 0.6f)); ;
+                HeroController.instance.AddGeo(PlayerData.instance.geo * random.Next(6, 10) / 10);
+                displayName = "Ad Revenue";
             }
         }
 
         public string GetName()
         {
-            return "GeoMultiplierUsable";
+            return "Geo_Multiplier_Usable";
         }
         public string GetDisplayName()
         {
-            return "Geo Multiplier";
+            return displayName;
         }
         public string GetDescription()
         {

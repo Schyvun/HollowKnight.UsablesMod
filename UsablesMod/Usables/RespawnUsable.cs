@@ -1,9 +1,9 @@
-﻿using System;
-
-namespace UsablesMod.Usables
+﻿namespace UsablesMod.Usables
 {
     class RespawnUsable : IUsable
     {
+        public RespawnUsable() {}
+
         public void Run()
         {
             GameManager.instance.HazardRespawn();
@@ -11,7 +11,7 @@ namespace UsablesMod.Usables
 
         public string GetName()
         {
-            return "RespawnUsable";
+            return "Hazard_Respawn_Usable";
         }
         public string GetDisplayName()
         {

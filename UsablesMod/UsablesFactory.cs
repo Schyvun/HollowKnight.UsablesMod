@@ -21,49 +21,53 @@ namespace UsablesMod
             random = new Random(RandomizerMod.RandomizerMod.Instance.Settings.Seed);
         }
 
-        internal IUsable GetRandomUsable()
+        internal IUsable GetRandomUsable(int randomSeed = -1)
         {
-            return CreateUsableById(random.Next(USABLES_AMOUNT));
+            return CreateUsableById(random.Next(USABLES_AMOUNT), randomSeed);
         }
 
-        private static IUsable CreateUsableById(int i)
+        private static IUsable CreateUsableById(int i, int randomSeed = -1)
         {
             switch (i)
             {
                 case 0:
-                    return new GeoMultiplierUsable();
+                    return new GeoMultiplierUsable(randomSeed);
                 case 1:
-                    return new HealthUsable();
+                    return new HealthUsable(randomSeed);
                 case 2:
-                    return new LifebloodUsable();
+                    return new LifebloodUsable(randomSeed);
                 case 3:
-                    return new MPCostUsable();
+                    return new MPCostUsable(randomSeed);
                 case 4:
-                    return new NailDamageUsable();
+                    return new NailModifierUsable(randomSeed);
                 case 5:
                     return new OvercharmedUsable();
                 case 6:
                     return new RespawnUsable();
                 case 7:
-                    return new ZoomUsable();
+                    return new ZoomUsable(randomSeed);
                 case 8:
-                    return new BounceUsable();
+                    return new BounceUsable(randomSeed);
                 case 9:
-                    return new RandomCharmsUsable();
+                    return new RandomCharmsUsable(randomSeed);
                 default:
-                    return new SampleUsable();
+                    return new SampleUsable(randomSeed);
             }
         }
 
         internal static bool TryCreateUsable(string descriptor, out IUsable usable)
         {
-            for (int i = 0; i < USABLES_AMOUNT; i++)
+            int usableId = NameFormatter.GetIdFromString(descriptor);
+            if (usableId != -1)
             {
-                IUsable _usable = CreateUsableById(i);
-                if (descriptor.StartsWith(_usable.GetName()))
+                for (int i = 0; i < USABLES_AMOUNT; i++)
                 {
-                    usable = _usable;
-                    return true;
+                    IUsable _usable = CreateUsableById(i, randomSeed: RandomizerMod.RandomizerMod.Instance.Settings.Seed + usableId);
+                    if (descriptor.StartsWith(_usable.GetName()))
+                    {
+                        usable = _usable;
+                        return true;
+                    }
                 }
             }
 
